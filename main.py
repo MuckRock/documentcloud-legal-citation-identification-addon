@@ -8,6 +8,8 @@ DocumentCloud using the standard API
 """
 
 from documentcloud.addon import AddOn
+from eyecite import get_citations
+import csv
 
 
 class HelloWorld(AddOn):
@@ -15,27 +17,25 @@ class HelloWorld(AddOn):
 
     def main(self):
         """The main add-on functionality goes here."""
-        # fetch your add-on specific data
-        name = self.data.get("name", "world")
 
-        self.set_message("Hello World start!")
+        citations_found = []
 
         # add a hello note to the first page of each selected document
         if self.documents:
             for document in self.client.documents.list(id__in=self.documents):
-                document.annotations.create(f"Hello {name}!", 0)
+                citations_found.append((document.title, document.id, get_citations(document.full_text)))
         elif self.query:
             documents = self.client.documents.search(self.query)[:3]
             for document in documents:
-                document.annotations.create(f"Hello {name}!", 0)
+                citations_found.append((document.title, document.id, get_citations(document.full_text)))
 
-        with open("hello.txt", "w+") as file_:
-            file_.write("Hello world!")
+        with open("citations_found.csv", "w+") as file_:
+            writer = csv.writer(file_)
+            writer.writerows(citations_found)
             self.upload_file(file_)
 
-        self.set_message("Hello World end!")
-        self.send_mail("Hello World!", "We finished!")
-
+        # just for testing
+        print(citations_found)
 
 if __name__ == "__main__":
     HelloWorld().main()
