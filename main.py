@@ -35,8 +35,5 @@ class LegalCitations(AddOn):
             writer.writerows(citations_found)
             self.upload_file(file_)
 
-        # just for testing
-        print(citations_found)
-
 if __name__ == "__main__":
     LegalCitations().main()
