@@ -4,7 +4,6 @@ import csv
 
 
 class LegalCitations(AddOn):
-
     def main(self):
 
         citations_found = []
@@ -15,7 +14,10 @@ class LegalCitations(AddOn):
             for document in self.client.documents.list(id__in=self.documents):
                 # identify the citations in the document.
                 citation_list = get_citations(document.full_text)
-                tagged_citation_list = [(document.title, document.id, citation) for citation in citation_list]
+                tagged_citation_list = [
+                    (document.title, document.id, citation)
+                    for citation in citation_list
+                ]
                 citations_found += tagged_citation_list
 
         # otherwise, use the query to get the documents of interest.
@@ -25,7 +27,10 @@ class LegalCitations(AddOn):
             for document in documents:
                 # identify the citations in the document.
                 citation_list = get_citations(document.full_text)
-                tagged_citation_list = [(document.title, document.id, citation) for citation in citation_list]
+                tagged_citation_list = [
+                    (document.title, document.id, citation)
+                    for citation in citation_list
+                ]
                 citations_found += tagged_citation_list
 
         # output the citations as a CSV.
@@ -34,6 +39,7 @@ class LegalCitations(AddOn):
             writer.writerow(("title", "id", "citation"))
             writer.writerows(citations_found)
             self.upload_file(file_)
+
 
 if __name__ == "__main__":
     LegalCitations().main()

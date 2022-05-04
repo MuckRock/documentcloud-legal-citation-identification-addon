@@ -1,7 +1,9 @@
 # The title is the title of your Add-On
 title: Legal Citations
 # The description will be shown above the form when activating the Add-On
-description: This add-on identifies any legal citations in the documents.
+description: >-
+    This add-on identifies any legal citations in the documents.
+    [Learn more about eyecite](https://pypi.org/project/eyecite/)
 # Type should always be object
 type: object
 # How does this add-on accept documents
