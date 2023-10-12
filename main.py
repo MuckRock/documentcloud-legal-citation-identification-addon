@@ -9,29 +9,13 @@ class LegalCitations(AddOn):
         citations_found = []
 
         # if the input parameter is specifying documents.
-        if self.documents:
-            # iterate through those documents.
-            for document in self.client.documents.list(id__in=self.documents):
-                # identify the citations in the document.
-                citation_list = get_citations(document.full_text)
-                tagged_citation_list = [
-                    (document.title, document.id, citation)
-                    for citation in citation_list
-                ]
-                citations_found += tagged_citation_list
-
-        # otherwise, use the query to get the documents of interest.
-        elif self.query:
-            # iterate through the documents in the query.
-            documents = self.client.documents.search(self.query)[:3]
-            for document in documents:
-                # identify the citations in the document.
-                citation_list = get_citations(document.full_text)
-                tagged_citation_list = [
-                    (document.title, document.id, citation)
-                    for citation in citation_list
-                ]
-                citations_found += tagged_citation_list
+        for document in self.get_documents():
+            citation_list = get_citations(document.full_text)
+            tagged_citation_list = [
+                (document.title, document.id, citation)
+                for citation in citation_list
+            ]
+            citations_found += tagged_citation_list
 
         # output the citations as a CSV.
         with open("citations_found.csv", "w+") as file_:
