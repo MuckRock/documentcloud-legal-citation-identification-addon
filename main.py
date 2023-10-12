@@ -2,7 +2,6 @@ from documentcloud.addon import AddOn
 from eyecite import get_citations
 import csv
 
-
 class LegalCitations(AddOn):
     def main(self):
 
@@ -10,7 +9,7 @@ class LegalCitations(AddOn):
         if not self.documents:
             self.set_message("Please select at least one document.")
             return
-        # if the input parameter is specifying documents.
+     
         for document in self.get_documents():
             citation_list = get_citations(document.full_text)
             tagged_citation_list = [
