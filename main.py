@@ -6,9 +6,6 @@ class LegalCitations(AddOn):
     def main(self):
 
         citations_found = []
-        if not self.documents:
-            self.set_message("Please select at least one document.")
-            return
      
         for document in self.get_documents():
             citation_list = get_citations(document.full_text)
