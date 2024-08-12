@@ -1,6 +1,8 @@
 """ Requires eyecite to find legal citations """
+import sys
 import csv
 from documentcloud.addon import AddOn
+from documentcloud.exceptions import DoesNotExistError
 from eyecite import get_citations
 
 
@@ -12,7 +14,11 @@ class LegalCitations(AddOn):
 
         for document in self.get_documents():
             for page_number in range(1, document.page_count + 1):
-                page_text = document.get_page_text(page_number)
+                try:
+                    page_text = document.get_page_text(page_number)
+                except DoesNotExistError:
+                    self.set_message(f"Could not match regular expressions on document with id {document.id}, please OCR this document and run Regex Extractor again.")
+                    sys.exit(0)
                 citation_list = get_citations(page_text)
                 tagged_citation_list = [
                     (document.title, document.id, page_number, citation)
